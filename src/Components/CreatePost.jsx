@@ -2,13 +2,15 @@ import React from 'react'
 import {useHistory} from 'react-router-dom'
 
 
-function CreatePost({handleInputChange, handleSubmit, isFormFilled}) {
+function CreatePost({handleInputChange, handleSubmit}) {
     const history = useHistory()
 
+    const handleFormSubmit = (e) => {
+      handleSubmit(e)
+      handleClick()
+    }
+
     function handleClick(){
-        // if (isFormFilled){
-        //     history.push('/show')
-        // }
         history.push('/show')
     }
 
@@ -26,7 +28,7 @@ function CreatePost({handleInputChange, handleSubmit, isFormFilled}) {
                 <label>Content</label>
                 <textarea name="content" id="" cols="30" rows="10" autoComplete='off' required />
             </div>
-            <button onClick={(e) => {handleSubmit(e); handleClick()}}>Create a Post</button>
+            <button onClick={(e) => {handleFormSubmit(e)}}>Create a Post</button>
         </form>
     )
 

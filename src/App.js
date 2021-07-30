@@ -7,88 +7,84 @@ import CreatePost from './Components/CreatePost';
 import ShowAllPosts from './Components/ShowAllPosts'
 import ShowSinglePost from './Components/ShowSinglePost'
 
+const initialPostState = {
+  id: '',
+  username: '',
+  title: '',
+  content: '',
+  date: ''
+}
+
+
 function App() {
-  const [posts, setPosts] = useState([])
-  const [post, setPost] = useState({
-    id: '',
-    username: '',
-    title: '',
-    content: '',
-    date: '',
-    isEditable: false
-  })
-  const inputValue = useRef()
-  // const [isFormFilled, setIsFormFilled] = useState(false)
+
+  /**
+    Yo aca le cambiaria los stateName a: 
+    [allPosts, setAllPosts] y [currentPost, setCurrentPost]
+    para entender mejor cual es la diferencia entre uno y el otro
+  */
+  const [ posts, setPosts ] = useState([])
+  const [ post, setPost ] = useState(initialPostState)
   
+  /**
+    Le agrego este editablePost state para manejar que post se esta
+    editando a traves del ID y dejo de usar el isEditable.
+  */
+  const [ editablePostId, setEditablePostId ] = useState()
+
+  const createPost = post => {
+    setPosts([...posts, post])
+  }
+
+  const deletePost = id => {
+    const filteredPostsList = posts.filter(post => post.id !== id)
+    setPosts(filteredPostsList)
+  }
+
+  const updatePost = (id, postData) => {
+    const currentPosts = posts
+    currentPosts.forEach((post, index, originalArray) => {
+      if(post.id === id) {
+        originalArray[index].title = postData.title
+        originalArray[index].content = postData.content
+      }
+    });
+
+    setPosts(currentPosts)
+  }
+
+  const setPostInEditionMode = id => {
+    setEditablePostId(id)
+  }   
 
   function generateID(){
     return Math.floor(Math.random() * Date.now()).toString()
   }
 
   function handleInputChange(e){
-    setPost({...post, [e.target.name]: e.target.value})
-
-    // if(post.username !== '' && post.title !== '' && post.content !== '') {
-    //   setIsFormFilled(true)
-    // } else {
-    //   setIsFormFilled(false)
-    // }
+    setPost({
+      ...post, 
+      [e.target.name]: e.target.value
+    })
   }
 
   function handleSubmit(e){
     e.preventDefault();
-    inputValue.current = post.title
-    // if(post.username === '' || post.title === '' || post.content === '') {
-    //   alert('Please, fill out all fields')
-    // }
-    setPosts([{...post, id: generateID(), date: `${moment().format('L')} ${moment().format('LT')}`}, ...posts]);
-    // setPosts([{...post, date: moment().calendar()}, ...posts]);
+
+    const newPost = {
+      ...post,
+      id: generateID(),
+      date: `${moment().format('L')} ${moment().format('LT')}`
+    }
+
+    createPost(newPost)
   }
 
-  function editPost(idx){
-    setPosts(posts.map(post=> {
-      if(post.id === idx){
-        post.isEditable = true
-      }
-      return post
-    }))
-  }
-
-  function saveChanges(idx, editedTitle, editedContent){
-    setPosts(posts.map(post=> {
-      if(post.id === idx){
-        post.title = editedTitle
-        post.content = editedContent
-        post.isEditable = false
-      }
-      return post
-    }))
-    // setPosts(post=> post.id === idx && {...post, title: editedTitle, content: editedContent});
-
-    // const postIdx = posts.findIndex(post => post.id === id)
-    // const posts_copy = [...posts]
-    // posts_copy[postIdx] = {...posts[postIdx],
-    //   username: userName,
-    //   title: title,
-    //   content: content
-    // }
-    // setPosts(posts_copy)
-  }
-
-  function deletePostHandler(id){
-    setPosts(posts.filter(post => post.id !== id))
-  }
-
+  /*
   useEffect(()=>{
-    setPost({
-      id: '',
-      username: '',
-      title: '',
-      content: '',
-      date: '',
-      isEditable: false
-    })
+    setPost(initialPostState)
   }, [posts])
+  */
 
   return (
     <div className="App">
@@ -98,7 +94,7 @@ function App() {
             <Link to='/'>Home</Link>
           </div>
           <div className='nav-item'>
-            <Link to='/create' >Create A Post</Link> {/* onClick={() => setIsFormFilled(false)} */}
+            <Link to='/create' >Create A Post</Link>
           </div>
           <div className='nav-item'>
             <Link to='/show'> Show Current Posts</Link>
@@ -107,10 +103,19 @@ function App() {
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/create'>
-            <CreatePost handleSubmit={handleSubmit} handleInputChange={handleInputChange} /> {/* isFormFilled={isFormFilled}  */}
+            <CreatePost 
+              handleSubmit={handleSubmit} 
+              handleInputChange={handleInputChange} 
+            />
           </Route>
           <Route path='/show' exact>
-            <ShowAllPosts posts={posts} onDelete={deletePostHandler} onEdit={editPost} saveChanges={saveChanges} handleInputChange={handleInputChange}  />
+            <ShowAllPosts 
+              posts={posts}
+              editablePostId={editablePostId}
+              onDelete={deletePost}
+              setPostInEditionMode={setPostInEditionMode} 
+              updatePost={updatePost}
+            />
           </Route>
           <Route path='/show/:postID'>
             <ShowSinglePost posts={posts} />
