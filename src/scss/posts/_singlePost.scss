@@ -1,0 +1,20 @@
+.singlePost {
+
+  .Post {
+    width: 100%;
+    // min-height: 300px;
+    position: relative;
+
+    div {
+      @include center;
+    }
+
+    p {
+      margin-top:35px;
+    }
+
+    .footer { 
+      text-align: right;
+    }
+  }
+}

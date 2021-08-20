@@ -1,0 +1,49 @@
+.createPost {
+  form {
+    margin: 0px auto;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+
+    div {
+      width: 100%;
+      margin: 0px auto 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      label {
+        margin-bottom: 5px;
+      }
+
+      input {
+        height: 20px;
+        padding: 0px 7px 1px;
+      }
+
+      input,
+      textarea {
+        border: none;
+        background-color: rgb(245, 245, 245);
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
+
+      textarea {
+        padding: 5px 7px 1px;
+        resize: none;
+      }
+
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}

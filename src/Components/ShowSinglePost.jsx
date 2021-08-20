@@ -1,28 +1,30 @@
 import React from 'react'
 import {useParams} from 'react-router-dom'
+import {FaReact} from 'react-icons/fa'
 
 function ShowSinglePost({allPosts}) {
     const {postID} = useParams()
 
     const singlePost = postID && (allPosts.map(item => {
         return item.id === postID && (
+            <><div className="hero">
+                <FaReact size={50} />
+                <h1>{item.title}</h1>
+                <FaReact size={50} />
+            </div>
             <div className='Post' key={item.id}>
-                <h2>{item.title}</h2>
                 <p>{item.content}</p>
                 <p className='footer italic'>{item.date} @ {item.username}</p>
-            </div>
+            </div></>
         )
     }))
 
     return (
-        <>
-            <h1>Post</h1>
+        <section className='singlePost'>
             <div className="container">
-                <div className="frameA">
-                    <div className='frameB'>{singlePost}</div>
-                </div>
+                {singlePost}
             </div>
-        </>
+        </section>
     )
 }
 

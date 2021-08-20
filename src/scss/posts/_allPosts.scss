@@ -1,0 +1,65 @@
+.postCard {
+  margin: 20px 0 0;
+  padding: 10px 20px;
+  
+  .icons {
+    text-align: right;
+    cursor: pointer;
+
+    * {
+      margin-left: 10px;
+    }
+  }
+  
+  h3 {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  a {
+    margin: 25px 0 10px;
+    font-size: 75%;
+
+    &:visited {
+      color: blue;
+    }
+  }
+  
+  .edit {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    * {
+      width: 100%;
+      margin: 10px auto ;
+      padding: 5px;
+      border: none;
+    }
+
+    *:focus {
+      outline: none;
+    }
+
+    input {
+      font-size: 100%;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    textarea {
+      min-height: 140px;
+      font-size: 80%;
+      resize: none;
+    }
+  }
+
+  p {
+    width: 100%;
+
+    &:last-child {
+      text-align: right;
+      font-size: 75%;
+    }
+  }
+}

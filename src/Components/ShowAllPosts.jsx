@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {RiDeleteBin6Line} from 'react-icons/ri'
 import {GrEdit, GrCheckmark} from 'react-icons/gr'
+import {FaReact} from 'react-icons/fa'
 
 const initialPostDataState = {
     title: '',
@@ -23,7 +24,15 @@ function ShowAllPosts({allPosts, editablePostId, setPostInEditionMode, updatePos
         setPostInEditionMode(null)
     }, [])
 
-    const handleEditClick = (post) => {
+    const handleMouseOver = post => {
+        setPostInEditionMode(post.id)
+    }
+
+    const handleMouveOut = () => {
+        setPostInEditionMode(null)
+    }
+
+    const handleEditClick = post => {
         setEditedPost({
             title: post.title,
             content: post.content
@@ -43,18 +52,17 @@ function ShowAllPosts({allPosts, editablePostId, setPostInEditionMode, updatePos
         setPostInEditionMode(null)
     }
 
-    const postCard = allPosts && (allPosts.map((item) => {
+    const postCard = allPosts.map((item) => {
         return (
             <div className='postCard' key={item.id}>
                 <div className='icons'>
                     {
-                        item.id === editablePostId ?
-                        <GrCheckmark onClick={() => {handleSubmitEdition(item.id, editedPost)}} /> :
-                        <GrEdit onClick={() => handleEditClick(item)} />
+                        item.id === editablePostId
+                        ? <GrCheckmark onClick={() => handleSubmitEdition(item.id, editedPost)} />
+                        : <GrEdit onClick={() => handleEditClick(item)} />
                     }
                     <RiDeleteBin6Line onClick={() => onDelete(item.id)} />
                 </div>
-    
                 {
                     item.id === editablePostId ? (
                         <div className='edit'>
@@ -64,26 +72,32 @@ function ShowAllPosts({allPosts, editablePostId, setPostInEditionMode, updatePos
                     ) : (
                         <>
                             <h3>{item.title}</h3>
-                            <Link to={`/show/${item.id}`}>Read the full article</Link>
+                            <p>{item.content}</p>
+                            <Link to={`/show/${item.id}`}>read more...</Link>
                         </>
                     )
                 }
-                
-                <p className='italic'>{item.date} @ {item.username}</p>
-                    
+                <p className='italic'>{item.date} @ {item.username}</p>          
             </div>
         )
-    }))
+    })
 
     return (
-        <>
-            <h1>Posts</h1>
+        <section className='allPosts'>
             <div className='container'>
-                <div className="frameA">
-                    <div className="frameB">{postCard}</div>
+                <div className="hero">
+                    <FaReact size={50} />
+                    <h1>Posts</h1>
+                    <FaReact size={50} />
                 </div>
+                {/* {
+                    allPosts > 0
+                    ? 
+                    : <p>There are no articles so far...</p>
+                } */}
+                {postCard}
             </div>
-        </>
+        </section>
     )
 }
 

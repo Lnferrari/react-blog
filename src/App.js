@@ -1,11 +1,15 @@
 import React, { useState, useEffect }  from 'react';
-import './App.css';
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import moment from 'moment'
 import Home from './Components/Home';
 import CreatePost from './Components/CreatePost';
 import ShowAllPosts from './Components/ShowAllPosts'
 import ShowSinglePost from './Components/ShowSinglePost'
+import NavigationBar from './Components/NavigationBar';
+import styled, { ThemeProvider } from 'styled-components';
+import { GlobalStyles, lightTheme, darkTheme } from './themes.js'
+import './main.scss';
+import { stringify } from 'uuid';
 
 const initialPostState = {
   id: '',
@@ -15,23 +19,31 @@ const initialPostState = {
   date: ''
 }
 
-function App() {
-  const [allPosts, setAllPosts] = useState([])
+const StyledApp = styled.div``
+
+const App = () => {
+  const localPosts = JSON.parse(localStorage.getItem('allPosts'))
+  const [theme, setTheme] = useState('light')
+  const [allPosts, setAllPosts] = useState(localPosts)
   const [currentPost, setCurrentPost] = useState(initialPostState)
   const [editablePostId, setEditablePostId] = useState()
 
-  function generateID(){
+  const themeToggler = () => {
+    theme === 'light' ? setTheme('dark') : setTheme('light')
+  }
+
+  const generateID = () => {
     return Math.floor(Math.random() * Date.now()).toString()
   } 
 
-  function handleInputChange(e){
+  const handleInputChange = (e) => {
     setCurrentPost({
       ...currentPost,
       [e.target.name]: e.target.value
     })
   }
 
-  function handleSubmit(e){
+  const handleSubmit = (e)=> {
     e.preventDefault();
     const newPost = {
       ...currentPost,
@@ -67,37 +79,31 @@ function App() {
 
   useEffect(()=>{
     setCurrentPost(initialPostState)
+    localStorage.setItem('allPosts', JSON.stringify(allPosts))
   }, [allPosts])
 
   return (
-    <div className="App">
-      <Router>
-        <nav>
-          <div className='nav-item'>
-            <Link to='/'>Home</Link>
-          </div>
-          <div className='nav-item'>
-            <Link to='/create' >Create A Post</Link>
-          </div>
-          <div className='nav-item'>
-            <Link to='/show'> Show Current Posts</Link>
-          </div>
-        </nav>
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/create'>
-            <CreatePost handleSubmit={handleSubmit} handleInputChange={handleInputChange} />
-          </Route>
-          <Route path='/show' exact>
-            <ShowAllPosts allPosts={allPosts} editablePostId={editablePostId} onDelete={deletePost} setPostInEditionMode={setPostInEditionMode} 
-              updatePost={updatePost}  />
-          </Route>
-          <Route path='/show/:postID'>
-            <ShowSinglePost allPosts={allPosts} />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+      <StyledApp className="App">
+        <Router>
+          <GlobalStyles />
+          <NavigationBar onClick={themeToggler} theme={theme}/>
+          <Switch>
+            <Route path='/' exact component={() => <Home posts={allPosts} />} />
+            <Route path='/create'>
+              <CreatePost handleSubmit={handleSubmit} handleInputChange={handleInputChange} />
+            </Route>
+            <Route path='/show' exact>
+              <ShowAllPosts allPosts={allPosts} editablePostId={editablePostId} onDelete={deletePost} setPostInEditionMode={setPostInEditionMode}
+                updatePost={updatePost}  />
+            </Route>
+            <Route path='/show/:postID'>
+              <ShowSinglePost allPosts={allPosts} />
+            </Route>
+          </Switch>
+        </Router>
+      </StyledApp>
+    </ThemeProvider>
   );
 }
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import {useHistory} from 'react-router-dom'
+import {FaReact} from 'react-icons/fa'
+
 
 
 function CreatePost({handleInputChange, handleSubmit}) {
@@ -33,16 +35,17 @@ function CreatePost({handleInputChange, handleSubmit}) {
     )
 
     return (
-        <>
-            <h1>Create a Post</h1>
+        <section className='createPost'>
             <div className='container'>
-                    <div className="frameA">
-                        <div className="frameB">
-                            {createPostForm}
-                        </div>
-                    </div>
+                <div className="hero">
+                <FaReact size={50} />
+                    <h1>Create a Post</h1> 
+                    <FaReact size={50} />
+
+                </div>
+                {createPostForm}
             </div>
-        </>
+        </section>
     )
 }
 

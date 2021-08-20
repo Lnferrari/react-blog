@@ -1,0 +1,38 @@
+nav {
+  height: 50px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .navItems-container {
+    display: flex;
+    // align-items: center;
+
+    .nav-item {
+      margin-right: 20px;
+
+      a {
+        padding: 2px;
+        text-decoration: none;
+        font-weight: bold;
+        color: inherit;
+
+        &.active {
+          border-bottom: 2px solid;
+        }
+      }
+    }
+  }
+
+  button {
+    padding: 8px;
+    background: transparent;
+    outline: none;
+    border: none;
+    @include center;
+    font-size: 25px;
+    cursor: pointer;
+  }
+}
+

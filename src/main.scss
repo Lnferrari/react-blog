@@ -1,0 +1,56 @@
+@import './scss/abstracts/_abstracts-dir';
+@import './scss/home/_home-dir';
+@import './scss/navigationBar/_navigation-dir';
+@import './scss/posts/_posts-dir';
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+  
+body {
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  
+  section {
+    max-width: 900px;
+    margin: 10px auto;
+    padding: 40px;
+    font-size: 22px;
+
+    .container {
+      padding: 40px;
+
+      .hero {
+        @include center;
+        margin: 0 auto 50px;
+      
+        h1 {
+          margin: 0 25px;
+        }
+      }
+    }
+  }
+
+  .italic {
+    font-style: italic;
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 540px) {
+  section {
+    padding: 25px;
+
+    .container {
+      padding: 25px;
+    }
+  }
+}
+
+
+
+
+
